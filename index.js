@@ -27,12 +27,27 @@ async function run() {
     // await client.connect();
 
     const addServiceCollection = client.db('docServiceDB').collection('addService');
+    const serviceProviderCollection = client.db('docServiceDB').collection('serviceProvider');
 
+    //Add Service get read from data to the server to client
+    app.get('/addService', async(req, res) => {
+        const cursor = addServiceCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
     //Add Service send to server to database
     app.post('/addService', async(req, res) => {
         const newAddService = req.body;
         console.log(newAddService);
         const result = await addServiceCollection.insertOne(newAddService);
+        res.send(result);
+    })
+
+    //User information send to server to database
+    app.post('/serviceProvider', async(req, res) => {
+        const serviceProvider = req.body;
+        console.log(serviceProvider);
+        const result = await serviceProviderCollection.insertOne(serviceProvider);
         res.send(result);
     })
 
