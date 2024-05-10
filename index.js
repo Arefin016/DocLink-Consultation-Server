@@ -35,6 +35,21 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
+    //Add Service information get specific filter by email from database to server
+    // app.get('/addService', async(req, res) => {
+    //     console.log(req.query);
+    //     const result = await addServiceCollection.find().toArray();
+    //     res.send(result)
+    // }) 
+    app.get('/serviceProvider', async(req, res) => {
+        console.log(req.query.serviceProviderEmail);
+        let query = {};
+        if(req.query?.serviceProviderEmail){
+            query = {email: req.query.email}
+        }
+        const result = await serviceProviderCollection.find(query).toArray();
+        res.send(result)
+    }) 
     //Add Service send to server to database
     app.post('/addService', async(req, res) => {
         const newAddService = req.body;
