@@ -26,7 +26,15 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
-    
+    const addServiceCollection = client.db('docServiceDB').collection('addService');
+
+    //Add Service send to server to database
+    app.post('/addService', async(req, res) => {
+        const newAddService = req.body;
+        console.log(newAddService);
+        const result = await addServiceCollection.insertOne(newAddService);
+        res.send(result);
+    })
 
 
 
