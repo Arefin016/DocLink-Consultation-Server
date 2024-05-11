@@ -36,15 +36,10 @@ async function run() {
         res.send(result);
     })
     //Add Service information get specific filter by email from database to server
-    // app.get('/addService', async(req, res) => {
-    //     console.log(req.query);
-    //     const result = await addServiceCollection.find().toArray();
-    //     res.send(result)
-    // }) 
     app.get('/serviceProvider', async(req, res) => {
-        console.log(req.query.serviceProviderEmail);
+        console.log(req.query.email);
         let query = {};
-        if(req.query?.serviceProviderEmail){
+        if(req.query?.email){
             query = {email: req.query.email}
         }
         const result = await serviceProviderCollection.find(query).toArray();
