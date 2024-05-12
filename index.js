@@ -28,11 +28,21 @@ async function run() {
 
     const addServiceCollection = client.db('docServiceDB').collection('addService');
     const serviceProviderCollection = client.db('docServiceDB').collection('serviceProvider');
+    const bookingServiceCollection = client.db('docServiceDB').collection('bookings');
 
     //Add Service get read from data to the server to client
     app.get('/addService', async(req, res) => {
         const cursor = addServiceCollection.find();
         const result = await cursor.toArray();
+        res.send(result);
+    })
+    app.get('/addService/:id', async(req, res) => {
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)}
+        const options = {
+            projection: {photo: 1, serviceName: 1, description:1, price:1, serviceProvideImage:1,   serviceProviderName:1, serviceArea: 1, serviceID: 1, _id: 1}
+        }
+        const result = await addServiceCollection.findOne(query, options);
         res.send(result);
     })
     //Add Service information get specific filter by email from database to server
@@ -90,6 +100,11 @@ async function run() {
         const query  = {_id: new ObjectId(id)}
         const result = await serviceProviderCollection.findOne(query);
         res.send(result)
+    })
+
+    // bookings
+    app.post('/bookings', async(req, res) => {
+        const booking = req.body;
     })
 
 
