@@ -29,6 +29,7 @@ async function run() {
     const addServiceCollection = client.db('docServiceDB').collection('addService');
     const serviceProviderCollection = client.db('docServiceDB').collection('serviceProvider');
     const bookingServiceCollection = client.db('docServiceDB').collection('bookings');
+    const popularServicesCollection = client.db('docServiceDB').collection('popularServices');
 
     //Add Service get read from data to the server to client
     app.get('/addService', async(req, res) => {
@@ -130,6 +131,12 @@ async function run() {
         const id = req.params.id;
         const query = {_id: new ObjectId(id)}
         const result = await bookingServiceCollection.deleteOne(query);
+        res.send(result);
+    })
+
+    app.get('/popularServices', async(req, res) => {
+        const cursor = popularServicesCollection.find();
+        const result = await cursor.toArray();
         res.send(result);
     })
 
