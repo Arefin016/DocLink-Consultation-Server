@@ -110,7 +110,7 @@ async function run() {
         if(req.query?.email){
             query = {email: req.query.email}
         }
-        const result = await  bookingServiceCollection.find(query).toArray();
+        const result = await bookingServiceCollection.find(query).toArray();
         res.send(result);
     }) 
 
@@ -121,11 +121,27 @@ async function run() {
         res.send(result);
     })
 
-    // app.patch('/bookings/:id', async(req, res) => {
-    //     const updatedBooking = req.body;
-    //     console.log(updatedBooking)
+    app.get('/bookings/:id', async(req, res) => {
+        const id = req.params.id;
+        const query  = {_id: new ObjectId(id)}
+        const result = await bookingServiceCollection.findOne(query);
+        res.send(result)
+    })
 
-    // })
+    //Update bookings
+    app.patch('/bookings/:id', async(req, res) => {
+        const id = req.params.id;
+        const filter = {_id: new ObjectId(id)}
+        const updatedBooking = req.body;
+        console.log(updatedBooking);
+        const updatedDoc = {
+            $set: {
+                status: updatedBooking.status
+            },
+        }
+        const result = await bookingServiceCollection.updateOne(filter, updatedDoc);
+        res.send(result)
+    })
 
     app.delete('/bookings/:id', async(req, res) => {
         const id = req.params.id;
@@ -134,6 +150,7 @@ async function run() {
         res.send(result);
     })
 
+    //Popular services
     app.get('/popularServices', async(req, res) => {
         const cursor = popularServicesCollection.find();
         const result = await cursor.toArray();
@@ -153,12 +170,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
-
-
-
-
 
 
 
